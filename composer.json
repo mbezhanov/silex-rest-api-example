@@ -1,5 +1,6 @@
 {
     "require": {
-        "silex/silex": "^2.1"
+        "silex/silex": "^2.1",
+        "symfony/console": "^3.3"
     }
 }
