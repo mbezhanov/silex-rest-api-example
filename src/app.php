@@ -22,7 +22,7 @@ $app->register(new DoctrineOrmServiceProvider, [
             [
                 'type' => 'annotation',
                 'namespace' => 'App\Entity',
-                'path' => __DIR__ . '/Entity',
+                'path' => __DIR__ . '/App/Entity',
                 'use_simple_annotation_reader' => false,
             ],
         ],
