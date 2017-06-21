@@ -9,7 +9,7 @@ $app = new Application();
 $app->register(new DoctrineServiceProvider, [
     'db.options' => [
         'driver' => 'pdo_sqlite',
-        'path' => __DIR__ . '/sqlite.db',
+        'path' => __DIR__ . '/../sqlite.db',
     ],
 ]);
 
