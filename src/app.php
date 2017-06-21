@@ -1,6 +1,9 @@
 <?php
 
+$loader = require __DIR__ . '/../vendor/autoload.php';
+
 use Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
+use Doctrine\Common\Annotations\AnnotationRegistry;
 use Silex\Application;
 use Silex\Provider\DoctrineServiceProvider;
 
@@ -18,11 +21,14 @@ $app->register(new DoctrineOrmServiceProvider, [
         'mappings' => [
             [
                 'type' => 'annotation',
-                'namespace' => 'App\Entities',
-                'path' => __DIR__ . '/Entities',
+                'namespace' => 'App\Entity',
+                'path' => __DIR__ . '/Entity',
+                'use_simple_annotation_reader' => false,
             ],
         ],
     ],
 ]);
+
+AnnotationRegistry::registerLoader([$loader, 'loadClass']);
 
 return $app;
