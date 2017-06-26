@@ -1,0 +1,13 @@
+App\Entity\Manufacturer:
+    manufacturer{1..10}:
+        name: '<company()>'
+App\Entity\Food:
+    food{1..10}:
+        name: '<name()>'
+        manufacturer: '@manufacturer*'
+        servingSize: '<numberBetween(50, 100)> gr'
+        calories: '<numberBetween(10, 700)>'
+        carbs: '<numberBetween(20, 200)>'
+        fat: '<numberBetween(10, 100)>'
+        protein: '<numberBetween(10, 100)>'
+        sugar: '<numberBetween(10, 50)>'

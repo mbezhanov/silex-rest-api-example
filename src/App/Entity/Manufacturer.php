@@ -26,4 +26,20 @@ class Manufacturer
      * @ORM\OneToMany(targetEntity="Food", mappedBy="manufacturer")
      */
     private $foods;
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param mixed $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
 }

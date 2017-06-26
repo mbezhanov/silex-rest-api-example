@@ -2,6 +2,7 @@
 
 set_time_limit(0);
 
+use Bezhanov\Silex\AliceDataFixtures\FixturesServiceProvider;
 use Doctrine\DBAL\Tools\Console\ConsoleRunner as DoctrineDBAL;
 use Doctrine\ORM\Tools\Console\ConsoleRunner as DoctrineORM;
 use Kurl\Silex\Provider\DoctrineMigrationsProvider;
@@ -19,6 +20,9 @@ $app->register(
         'migrations.namespace' => 'App\Migrations',
     ]
 );
+
+$app->register(new FixturesServiceProvider($console));
+
 $app->boot();
 
 $helperSet = $console->getHelperSet();

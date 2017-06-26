@@ -1,8 +1,17 @@
 {
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        }
+    },
+    "minimum-stability": "RC",
     "require": {
         "silex/silex": "^2.1",
         "symfony/console": "^3.3",
         "dflydev/doctrine-orm-service-provider": "^2.0",
         "kurl/silex-doctrine-migrations-provider": "^0.2.2"
+    },
+    "require-dev": {
+        "mbezhanov/silex-alice-data-fixtures": "^0.1.0"
     }
 }
