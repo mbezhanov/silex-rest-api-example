@@ -2,10 +2,13 @@
 
 set_time_limit(0);
 
+use Bezhanov\Faker\ProviderCollectionHelper;
 use Bezhanov\Silex\AliceDataFixtures\FixturesServiceProvider;
 use Doctrine\DBAL\Tools\Console\ConsoleRunner as DoctrineDBAL;
 use Doctrine\ORM\Tools\Console\ConsoleRunner as DoctrineORM;
+use Faker\Factory;
 use Kurl\Silex\Provider\DoctrineMigrationsProvider;
+use Nelmio\Alice\Faker\Provider\AliceProvider;
 use Symfony\Component\Console\Application;
 
 $app = require __DIR__.'/../src/app.php';
@@ -21,7 +24,13 @@ $app->register(
     ]
 );
 
-$app->register(new FixturesServiceProvider($console));
+$faker = Factory::create();
+$faker->addProvider(new AliceProvider($faker));
+ProviderCollectionHelper::addAllProvidersTo($faker);
+
+$app->register(new FixturesServiceProvider($console), [
+    'fixtures.faker_generator' => $faker,
+]);
 
 $app->boot();
 

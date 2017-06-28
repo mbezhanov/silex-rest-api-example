@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "fee62f9434003ab04bc6d17a0aeea244",
+    "content-hash": "13436d68a48544525f6361a9ee4cab5b",
     "packages": [
         {
             "name": "dflydev/doctrine-orm-service-provider",
@@ -739,29 +739,29 @@
         },
         {
             "name": "kurl/silex-doctrine-migrations-provider",
-            "version": "0.2.2",
+            "version": "0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/kurlltd/silex-doctrine-migrations-provider.git",
-                "reference": "a0f570748faa4726be734a6491d8fd870575a19d"
+                "reference": "b84de3626eeb172dda9399e5c1c2b8797b4e94a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kurlltd/silex-doctrine-migrations-provider/zipball/a0f570748faa4726be734a6491d8fd870575a19d",
-                "reference": "a0f570748faa4726be734a6491d8fd870575a19d",
+                "url": "https://api.github.com/repos/kurlltd/silex-doctrine-migrations-provider/zipball/b84de3626eeb172dda9399e5c1c2b8797b4e94a8",
+                "reference": "b84de3626eeb172dda9399e5c1c2b8797b4e94a8",
                 "shasum": ""
             },
             "require": {
                 "doctrine/dbal": "^2.2",
-                "doctrine/migrations": "^1.0",
-                "php": "^5.5|^7",
+                "doctrine/migrations": "^1.5",
+                "php": "^7.1.0",
                 "pimple/pimple": "^3.0",
                 "silex/api": "^2.0",
                 "symfony/console": "^2.3 | ^3.0"
             },
             "require-dev": {
                 "doctrine/orm": "^2.2",
-                "phpunit/phpunit": "^3.7",
+                "phpunit/phpunit": "^5.7",
                 "silex/silex": "^2.0"
             },
             "type": "library",
@@ -775,7 +775,7 @@
                 "MIT"
             ],
             "description": "A doctrine migrations provider for silex",
-            "time": "2017-05-30T13:31:26+00:00"
+            "time": "2017-06-27T10:29:35+00:00"
         },
         {
             "name": "ocramius/package-versions",
@@ -827,29 +827,33 @@
         },
         {
             "name": "ocramius/proxy-manager",
-            "version": "2.0.4",
+            "version": "2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Ocramius/ProxyManager.git",
-                "reference": "a55d08229f4f614bf335759ed0cf63378feeb2e6"
+                "reference": "e18ac876b2e4819c76349de8f78ccc8ef1554cd7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Ocramius/ProxyManager/zipball/a55d08229f4f614bf335759ed0cf63378feeb2e6",
-                "reference": "a55d08229f4f614bf335759ed0cf63378feeb2e6",
+                "url": "https://api.github.com/repos/Ocramius/ProxyManager/zipball/e18ac876b2e4819c76349de8f78ccc8ef1554cd7",
+                "reference": "e18ac876b2e4819c76349de8f78ccc8ef1554cd7",
                 "shasum": ""
             },
             "require": {
-                "ocramius/package-versions": "^1.0",
-                "php": "7.0.0 - 7.0.5 || ^7.0.7",
-                "zendframework/zend-code": "3.0.0 - 3.0.2 || ^3.0.4"
+                "ocramius/package-versions": "^1.1.1",
+                "php": "^7.1.0",
+                "zendframework/zend-code": "^3.1.0"
             },
             "require-dev": {
-                "couscous/couscous": "^1.4.0",
+                "couscous/couscous": "^1.5.2",
                 "ext-phar": "*",
-                "phpbench/phpbench": "^0.11.2",
-                "phpunit/phpunit": "^5.4.6",
-                "squizlabs/php_codesniffer": "^2.6.0"
+                "humbug/humbug": "dev-master@DEV",
+                "nikic/php-parser": "^3.0.4",
+                "phpbench/phpbench": "^0.12.2",
+                "phpstan/phpstan": "^0.6.4",
+                "phpunit/phpunit": "^5.6.4",
+                "phpunit/phpunit-mock-objects": "^3.4.1",
+                "squizlabs/php_codesniffer": "^2.7.0"
             },
             "suggest": {
                 "ocramius/generated-hydrator": "To have very fast object to array to object conversion for ghost objects",
@@ -888,7 +892,7 @@
                 "proxy pattern",
                 "service proxies"
             ],
-            "time": "2016-11-04T15:53:15+00:00"
+            "time": "2017-05-04T11:12:50+00:00"
         },
         {
             "name": "pimple/pimple",
@@ -1805,17 +1809,63 @@
             "time": "2016-04-29T12:21:54+00:00"
         },
         {
-            "name": "mbezhanov/silex-alice-data-fixtures",
+            "name": "mbezhanov/faker-provider-collection",
             "version": "0.1.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/mbezhanov/silex-alice-data-fixtures.git",
-                "reference": "7c031cde8d1fa27c38a2e2395d4580f2da1d99ef"
+                "url": "https://github.com/mbezhanov/faker-provider-collection.git",
+                "reference": "5d60247de4c0cf731b4b3fedf8788aa3526524c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mbezhanov/silex-alice-data-fixtures/zipball/7c031cde8d1fa27c38a2e2395d4580f2da1d99ef",
-                "reference": "7c031cde8d1fa27c38a2e2395d4580f2da1d99ef",
+                "url": "https://api.github.com/repos/mbezhanov/faker-provider-collection/zipball/5d60247de4c0cf731b4b3fedf8788aa3526524c5",
+                "reference": "5d60247de4c0cf731b4b3fedf8788aa3526524c5",
+                "shasum": ""
+            },
+            "require": {
+                "fzaninotto/faker": "^1.6",
+                "php": "^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^6.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Bezhanov\\Faker\\": "src/Faker"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marin Bezhanov",
+                    "email": "marin.bezhanov@gmail.com",
+                    "homepage": "http://marinbezhanov.com"
+                }
+            ],
+            "description": "A collection of custom providers for the Faker library",
+            "keywords": [
+                "data",
+                "faker",
+                "fixtures"
+            ],
+            "time": "2017-06-27T13:27:00+00:00"
+        },
+        {
+            "name": "mbezhanov/silex-alice-data-fixtures",
+            "version": "0.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mbezhanov/silex-alice-data-fixtures.git",
+                "reference": "ae4280bb7c27d117484c5781e096bbfa44402b63"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mbezhanov/silex-alice-data-fixtures/zipball/ae4280bb7c27d117484c5781e096bbfa44402b63",
+                "reference": "ae4280bb7c27d117484c5781e096bbfa44402b63",
                 "shasum": ""
             },
             "require": {
@@ -1853,7 +1903,7 @@
                 "fixtures",
                 "silex"
             ],
-            "time": "2017-06-26T15:48:40+00:00"
+            "time": "2017-06-28T08:05:23+00:00"
         },
         {
             "name": "myclabs/deep-copy",

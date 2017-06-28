@@ -3,7 +3,7 @@ App\Entity\Manufacturer:
         name: '<company()>'
 App\Entity\Food:
     food{1..10}:
-        name: '<name()>'
+        name: '<ingredient()>'
         manufacturer: '@manufacturer*'
         servingSize: '<numberBetween(50, 100)> gr'
         calories: '<numberBetween(10, 700)>'
