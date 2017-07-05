@@ -15,7 +15,13 @@ use Symfony\Component\Validator\Mapping\Factory\LazyLoadingMetadataFactory;
 
 AnnotationRegistry::registerLoader([$loader, 'loadClass']);
 
+const APP_CACHE_DIR = __DIR__ . '/../var/cache';
+
 $app = new Application();
+
+$app['cache'] = function () {
+    return new \Doctrine\Common\Cache\FilesystemCache(APP_CACHE_DIR);
+};
 
 $app->register(new DoctrineServiceProvider, [
         'db.options' => [
@@ -24,6 +30,11 @@ $app->register(new DoctrineServiceProvider, [
         ],
     ])
     ->register(new DoctrineOrmServiceProvider, [
+        'orm.cache.instances.default.query' => $app['cache'],
+        'orm.cache.instances.default.result' => $app['cache'],
+        'orm.cache.instances.default.metadata' => $app['cache'],
+        'orm.cache.instances.default.hydration' => $app['cache'],
+        'orm.proxies_dir' => APP_CACHE_DIR . '/proxy',
         'orm.em.options' => [
             'mappings' => [
                 [
@@ -37,18 +48,24 @@ $app->register(new DoctrineServiceProvider, [
     ])
     ->register(new ServiceControllerServiceProvider())
     ->register(new ValidatorServiceProvider(), [
-        'validator.mapping.class_metadata_factory' => function ($app) use ($cacheDriver) {
+        'validator.mapping.class_metadata_factory' => function ($app) {
             $loader = new AnnotationLoader(new AnnotationReader());
-            return new LazyLoadingMetadataFactory($loader /*, $cacheDriver */);
+            $cacheDriver = new \Symfony\Component\Validator\Mapping\Cache\DoctrineCache($app['cache']);
+            return new LazyLoadingMetadataFactory($loader, $cacheDriver);
         },
     ])
     ->register(new RouteAnnotationsProvider(), [
-//        'routing.cache_adapter' => new \Symfony\Component\Cache\Adapter\FilesystemAdapter('', 0, __DIR__ . '/../var/cache'),
+        'routing.cache_adapter' => function ($app) {
+            return new \Symfony\Component\Cache\Adapter\DoctrineAdapter($app['cache']);
+        },
         'routing.controller_dir' => __DIR__ . '/App/Controller',
     ]);
 
-$app['serializer'] = function() {
-    return \Hateoas\HateoasBuilder::create()->build();
+$app['serializer'] = function ($app) {
+    return \Hateoas\HateoasBuilder::create()
+        ->setUrlGenerator(null, new \Hateoas\UrlGenerator\SymfonyUrlGenerator($app['url_generator']))
+        ->setCacheDir(APP_CACHE_DIR)
+        ->build();
 };
 
 $app['app.controller.manufacturer_controller'] = function ($app) {
