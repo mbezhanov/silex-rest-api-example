@@ -2,13 +2,17 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Hateoas\Configuration\Annotation as Hateoas;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="manufacturer")
+ * @Hateoas\Relation("self", href="expr('/manufacturers/' ~ object.getId())")
  */
-class Manufacturer
+class Manufacturer extends Entity
 {
     /**
      * @ORM\Id
@@ -19,6 +23,7 @@ class Manufacturer
 
     /**
      * @ORM\Column(type="string")
+     * @Assert\NotBlank()
      */
     private $name;
 
@@ -27,18 +32,27 @@ class Manufacturer
      */
     private $foods;
 
-    /**
-     * @return mixed
-     */
-    public function getName()
+    public function __construct()
+    {
+        $this->foods = new ArrayCollection();
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id)
+    {
+        $this->id = $id;
+    }
+
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param mixed $name
-     */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
     }

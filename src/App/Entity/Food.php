@@ -3,12 +3,15 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Hateoas\Configuration\Annotation as Hateoas;
+use JMS\Serializer\Annotation as Serializer;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
  * @ORM\Table(name="food")
  */
-class Food
+class Food extends Entity
 {
     /**
      * @ORM\Id
@@ -19,168 +22,138 @@ class Food
 
     /**
      * @ORM\Column(type="string")
+     * @Assert\NotBlank()
      */
     private $name;
 
     /**
      * @ORM\ManyToOne(targetEntity="Manufacturer", inversedBy="foods")
+     * @Assert\NotBlank()
      */
     private $manufacturer;
 
     /**
      * @ORM\Column(type="string")
+     * @Assert\NotBlank()
      */
     private $servingSize;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank()
      */
     private $calories;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank()
      */
     private $carbs;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank()
      */
     private $fat;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank()
      */
     private $protein;
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank()
      */
     private $sugar;
 
-    /**
-     * @return mixed
-     */
-    public function getName()
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function setId(int $id)
+    {
+        $this->id = $id;
+    }
+
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param mixed $name
-     */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getManufacturer()
+    public function getManufacturer(): Manufacturer
     {
         return $this->manufacturer;
     }
 
-    /**
-     * @param mixed $manufacturer
-     */
-    public function setManufacturer($manufacturer)
+    public function setManufacturer(Manufacturer $manufacturer)
     {
         $this->manufacturer = $manufacturer;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getServingSize()
+    public function getServingSize(): string
     {
         return $this->servingSize;
     }
 
-    /**
-     * @param mixed $servingSize
-     */
-    public function setServingSize($servingSize)
+    public function setServingSize(string $servingSize)
     {
         $this->servingSize = $servingSize;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getCalories()
+    public function getCalories(): int
     {
         return $this->calories;
     }
 
-    /**
-     * @param mixed $calories
-     */
-    public function setCalories($calories)
+    public function setCalories(int $calories)
     {
         $this->calories = $calories;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getCarbs()
+    public function getCarbs(): int
     {
         return $this->carbs;
     }
 
-    /**
-     * @param mixed $carbs
-     */
-    public function setCarbs($carbs)
+    public function setCarbs(int $carbs)
     {
         $this->carbs = $carbs;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getFat()
+    public function getFat(): int
     {
         return $this->fat;
     }
 
-    /**
-     * @param mixed $fat
-     */
-    public function setFat($fat)
+    public function setFat(int $fat)
     {
         $this->fat = $fat;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getProtein()
+    public function getProtein(): int
     {
         return $this->protein;
     }
 
-    /**
-     * @param mixed $protein
-     */
-    public function setProtein($protein)
+    public function setProtein(int $protein)
     {
         $this->protein = $protein;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getSugar()
+    public function getSugar(): int
     {
         return $this->sugar;
     }
 
-    /**
-     * @param mixed $sugar
-     */
-    public function setSugar($sugar)
+    public function setSugar(int $sugar)
     {
         $this->sugar = $sugar;
     }

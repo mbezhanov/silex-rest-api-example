@@ -1,17 +1,32 @@
 {
+    "name": "mbezhanov/silex-rest-api-example",
+    "keywords": ["silex", "rest", "api", "example"],
+    "description": "An example REST API implemented in Silex",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Marin Bezhanov",
+            "email": "marin.bezhanov@gmail.com",
+            "homepage": "http://marinbezhanov.com"
+        }
+    ],
     "autoload": {
         "psr-4": {
-            "": "src/"
+            "App\\": "src/App"
         }
     },
     "minimum-stability": "RC",
     "require": {
+        "php": "^7.1",
         "silex/silex": "^2.1",
-        "symfony/console": "^3.3",
         "dflydev/doctrine-orm-service-provider": "^2.0",
         "kurl/silex-doctrine-migrations-provider": "^0.3",
-        "mbezhanov/silex-route-annotations": "^0.1.0",
-        "symfony/cache": "^3.3"
+        "mbezhanov/silex-route-annotations": "^0.2.1",
+        "symfony/cache": "^3.3",
+        "symfony/console": "^3.3",
+        "symfony/validator": "^3.3",
+        "willdurand/hateoas": "^2.11"
     },
     "require-dev": {
         "mbezhanov/silex-alice-data-fixtures": "^0.2",

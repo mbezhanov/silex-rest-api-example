@@ -2,47 +2,92 @@
 
 namespace App\Controller;
 
-use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Manufacturer;
+use Bezhanov\Silex\Routing\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-class ManufacturerController
+class ManufacturerController extends ResourceController
 {
     /**
      * @Route("/manufacturers", methods={"GET"})
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        return 'collection of manufacturers';
+        $collection = $this->em->getRepository($this->getEntityClassName())->findAll();
+        $data = $this->serializer->serialize($collection, 'hal+json');
+
+        return new JsonResponse($data, Response::HTTP_OK, [], true);
     }
 
     /**
      * @Route("/manufacturers", methods={"POST"})
      */
-    public function createAction()
+    public function createAction(Request $request)
     {
-        return 'store stuff';
+        $item = new Manufacturer();
+        $item->setName($request->request->get('name'));
+
+        $this->em->persist($item);
+        $this->em->flush();
+
+        $response = new Response('', Response::HTTP_CREATED);
+        $response->headers->set('Location', sprintf('/manufacturers/%d', $item->getId()));
+
+        return $response;
     }
 
     /**
-     * @Route("/manufacturers/{id}", methods={"GET"})
+     * @Route("/manufacturers/{id}", methods={"GET"}, requirements={"id": "\d+"})
      */
-    public function readAction($id)
+    public function readAction(int $id)
     {
-        return "read $id";
+        $entity = $this->findOrFail($id);
+        $data = $this->serializer->serialize($entity, 'json');
+
+        return new JsonResponse($data, Response::HTTP_OK, [], true);
     }
 
     /**
-     * @Route("/manufacturers/{id}", methods={"PUT", "PATCH"})
+     * @Route("/manufacturers/{id}", methods={"PUT", "PATCH"}, requirements={"id": "\d+"})
      */
-    public function updateAction($id)
+    public function updateAction(int $id, Request $request)
     {
-        return "update $id";
+        $requestBody = json_decode($request->getContent(), true);
+        $entity = $this->findOrFail($id);
+        $entity->fromArray($requestBody, ['name']);
+
+        $errors = $this->validator->validate($entity);
+
+        if (count($errors) > 0) {
+            die('validation failed: ' . PHP_EOL . $errors);
+        }
+
+        $this->em->persist($entity);
+        $this->em->flush();
+
+        $response = new Response('', Response::HTTP_NO_CONTENT);
+
+        return $response;
     }
 
     /**
-     * @Route("/manufacturers/{id}", methods={"DELETE"})
+     * @Route("/manufacturers/{id}", methods={"DELETE"}, requirements={"id": "\d+"})
      */
-    public function deleteAction($id)
+    public function deleteAction(int $id)
     {
-        return "delete $id";
+        $entity = $this->findOrFail($id);
+        $this->em->remove($entity);
+        $this->em->flush();
+
+        $response = new Response('', Response::HTTP_NO_CONTENT);
+
+        return $response;
+    }
+
+    protected function getEntityClassName(): string
+    {
+        return Manufacturer::class;
     }
 }

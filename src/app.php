@@ -4,10 +4,14 @@ $loader = require __DIR__ . '/../vendor/autoload.php';
 
 use Bezhanov\Silex\Routing\RouteAnnotationsProvider;
 use Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
+use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Silex\Application;
 use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
+use Silex\Provider\ValidatorServiceProvider;
+use Symfony\Component\Validator\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Validator\Mapping\Factory\LazyLoadingMetadataFactory;
 
 AnnotationRegistry::registerLoader([$loader, 'loadClass']);
 
@@ -32,19 +36,25 @@ $app->register(new DoctrineServiceProvider, [
         ],
     ])
     ->register(new ServiceControllerServiceProvider())
+    ->register(new ValidatorServiceProvider(), [
+        'validator.mapping.class_metadata_factory' => function ($app) use ($cacheDriver) {
+            $loader = new AnnotationLoader(new AnnotationReader());
+            return new LazyLoadingMetadataFactory($loader /*, $cacheDriver */);
+        },
+    ])
     ->register(new RouteAnnotationsProvider(), [
-        'routing.cache_adapter' => new \Symfony\Component\Cache\Adapter\FilesystemAdapter('', 0, __DIR__ . '/../var/cache'),
+//        'routing.cache_adapter' => new \Symfony\Component\Cache\Adapter\FilesystemAdapter('', 0, __DIR__ . '/../var/cache'),
         'routing.controller_dir' => __DIR__ . '/App/Controller',
     ]);
 
-$app['manufacturer.controller'] = function() {
-    return new \App\Controller\ManufacturerController();
+$app['serializer'] = function() {
+    return \Hateoas\HateoasBuilder::create()->build();
 };
 
-$app->get('/hoy', 'manufacturer.controller:indexAction');
-//$app->post('/manufacturers', 'manufacturer.controller:createAction');
-//$app->get('/manufacturers/{id}', 'manufacturer.controller:readAction');
-//$app->match('/manufacturers/{id}', 'manufacturer.controller:updateAction')->method('PUT|PATCH');
-//$app->delete('/manufacturers/{id}', 'manufacturer.controller:deleteAction');
+$app['app.controller.manufacturer_controller'] = function ($app) {
+    return new App\Controller\ManufacturerController($app['orm.em'], $app['serializer'], $app['validator']);
+};
+
+$app['debug'] = true;
 
 return $app;

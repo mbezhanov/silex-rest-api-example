@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use Symfony\Component\Routing\Annotation\Route;
+use Bezhanov\Silex\Routing\Route;
 
 class FoodController
 {
