@@ -4,6 +4,9 @@ namespace App\Controller;
 
 use App\Entity\Manufacturer;
 use Bezhanov\Silex\Routing\Route;
+use Hateoas\Representation\Factory\PagerfantaFactory;
+use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,20 +14,24 @@ use Symfony\Component\HttpFoundation\Response;
 class ManufacturerController extends ResourceController
 {
     /**
-     * @Route("/manufacturers", methods={"GET"})
+     * @Route("/manufacturers", methods={"GET"}, name="list_manufacturers")
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request): Response
     {
-        $collection = $this->em->getRepository($this->getEntityClassName())->findAll();
-        $data = $this->serializer->serialize($collection, 'hal+json');
+        $queryBuilder = $this->em->createQueryBuilder()->select('m')->from($this->getEntityClassName(), 'm');
+        $adapter = new DoctrineORMAdapter($queryBuilder);
+        $pager = new Pagerfanta($adapter);
+        $pager->setCurrentPage($request->query->get('page', 1))->setMaxPerPage($request->query->get('limit', 10));
+        $factory = new PagerfantaFactory();
+        $collection = $factory->createRepresentation($pager, new \Hateoas\Configuration\Route('list_manufacturers'));
 
-        return new JsonResponse($data, Response::HTTP_OK, [], true);
+        return $this->createApiResponse($collection, Response::HTTP_OK);
     }
 
     /**
      * @Route("/manufacturers", methods={"POST"})
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request): Response
     {
         $item = new Manufacturer();
         $item->setName($request->request->get('name'));
@@ -41,7 +48,7 @@ class ManufacturerController extends ResourceController
     /**
      * @Route("/manufacturers/{id}", methods={"GET"}, requirements={"id": "\d+"})
      */
-    public function readAction(int $id)
+    public function readAction(int $id): Response
     {
         $entity = $this->findOrFail($id);
         $data = $this->serializer->serialize($entity, 'json');
@@ -52,7 +59,7 @@ class ManufacturerController extends ResourceController
     /**
      * @Route("/manufacturers/{id}", methods={"PUT", "PATCH"}, requirements={"id": "\d+"})
      */
-    public function updateAction(int $id, Request $request)
+    public function updateAction(int $id, Request $request): Response
     {
         $requestBody = json_decode($request->getContent(), true);
         $entity = $this->findOrFail($id);
@@ -75,7 +82,7 @@ class ManufacturerController extends ResourceController
     /**
      * @Route("/manufacturers/{id}", methods={"DELETE"}, requirements={"id": "\d+"})
      */
-    public function deleteAction(int $id)
+    public function deleteAction(int $id): Response
     {
         $entity = $this->findOrFail($id);
         $this->em->remove($entity);

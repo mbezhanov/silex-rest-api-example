@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Hateoas\Configuration\Annotation as Hateoas;
+use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -29,6 +30,7 @@ class Manufacturer extends Entity
 
     /**
      * @ORM\OneToMany(targetEntity="Food", mappedBy="manufacturer")
+     * @Serializer\Exclude()
      */
     private $foods;
 

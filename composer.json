@@ -23,6 +23,7 @@
         "dflydev/doctrine-orm-service-provider": "^2.0",
         "kurl/silex-doctrine-migrations-provider": "^0.3",
         "mbezhanov/silex-route-annotations": "^0.2.1",
+        "pagerfanta/pagerfanta": "^1.0",
         "symfony/cache": "^3.3",
         "symfony/console": "^3.3",
         "symfony/validator": "^3.3",
