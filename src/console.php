@@ -2,6 +2,7 @@
 
 set_time_limit(0);
 
+use App\Command\ClearCacheCommand;
 use Bezhanov\Faker\ProviderCollectionHelper;
 use Bezhanov\Silex\AliceDataFixtures\FixturesServiceProvider;
 use Doctrine\DBAL\Tools\Console\ConsoleRunner as DoctrineDBAL;
@@ -15,6 +16,7 @@ $app = require __DIR__.'/../src/app.php';
 
 $console = new Application('REST API', '0.1.0');
 $console->setDispatcher($app['dispatcher']);
+$console->add(new ClearCacheCommand());
 
 $app->register(
     new DoctrineMigrationsProvider($console),
