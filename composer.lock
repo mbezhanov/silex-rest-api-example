@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "88c899b15a082f2ff9ae8ee15374d609",
+    "content-hash": "d9202b920cc52316fc758e2412b27d7d",
     "packages": [
         {
             "name": "dflydev/doctrine-orm-service-provider",
@@ -1976,7 +1976,7 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v3.3.3",
+            "version": "v3.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",

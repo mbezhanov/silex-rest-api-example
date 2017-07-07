@@ -68,6 +68,11 @@ class Food extends Entity
      */
     private $sugar;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Diary", mappedBy="food")
+     */
+    private $diaryEntries;
+
     public function getId(): int
     {
         return $this->id;

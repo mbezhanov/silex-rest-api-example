@@ -2,7 +2,7 @@ App\Entity\Manufacturer:
     manufacturer{1..10}:
         name: '<company()>'
 App\Entity\Food:
-    food{1..10}:
+    food{1..50}:
         name: '<ingredient()>'
         manufacturer: '@manufacturer*'
         servingSize: '<numberBetween(50, 100)> gr'
@@ -11,3 +11,11 @@ App\Entity\Food:
         fat: '<numberBetween(10, 100)>'
         protein: '<numberBetween(10, 100)>'
         sugar: '<numberBetween(10, 50)>'
+App\Entity\Meal:
+    meal{Breakfast, Lunch, Dinner}:
+        name: '<current()>'
+App\Entity\Diary:
+    diary{1..100}:
+        date: '<dateTimeThisMonth()>'
+        meal: '@meal*'
+        food: '@food*'
