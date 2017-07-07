@@ -70,6 +70,7 @@ class Food extends Entity
 
     /**
      * @ORM\OneToMany(targetEntity="Diary", mappedBy="food")
+     * @Serializer\Exclude()
      */
     private $diaryEntries;
 

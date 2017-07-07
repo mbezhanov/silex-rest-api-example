@@ -19,7 +19,6 @@ class ClearCacheCommand extends Command
         $fs = new Filesystem();
 
         foreach (new \DirectoryIterator(APP_CACHE_DIR) as $fileInfo) {
-            /** @var \SplFileInfo $fileInfo */
             if ($fileInfo->isDir() && !$fileInfo->isDot()) {
                 if ($output->isVerbose()) {
                     $output->writeln(sprintf('Deleting folder: %s', $fileInfo->getPathname()));

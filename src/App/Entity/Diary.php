@@ -5,7 +5,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\DiaryRepository")
  * @ORM\Table(name="diary")
  */
 class Diary extends Entity
@@ -23,13 +23,13 @@ class Diary extends Entity
     private $date;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Meal")
+     * @ORM\ManyToOne(targetEntity="Meal", fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
      */
     private $meal;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Food", inversedBy="diaryEntries")
+     * @ORM\ManyToOne(targetEntity="Food", inversedBy="diaryEntries", fetch="EAGER")
      * @ORM\JoinColumn(nullable=false)
      */
     private $food;

@@ -35,6 +35,7 @@ $app->register(new DoctrineServiceProvider, [
         'orm.cache.instances.default.metadata' => $app['cache'],
         'orm.cache.instances.default.hydration' => $app['cache'],
         'orm.proxies_dir' => APP_CACHE_DIR . '/proxy',
+        'orm.auto_generate_proxies' => false,
         'orm.em.options' => [
             'mappings' => [
                 [
@@ -70,6 +71,14 @@ $app['serializer'] = function ($app) {
 
 $app['app.controller.manufacturer_controller'] = function ($app) {
     return new App\Controller\ManufacturerController($app['orm.em'], $app['serializer'], $app['validator']);
+};
+
+$app['app.controller.food_controller'] = function ($app) {
+    return new App\Controller\FoodController($app['orm.em'], $app['serializer'], $app['validator']);
+};
+
+$app['app.controller.diary_controller'] = function ($app) {
+    return new App\Controller\DiaryController($app['orm.em'], $app['serializer'], $app['validator']);
 };
 
 $app['debug'] = true;
