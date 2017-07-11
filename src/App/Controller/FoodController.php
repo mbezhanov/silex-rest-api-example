@@ -4,9 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Food;
 use Bezhanov\Silex\Routing\Route;
-use Hateoas\Representation\Factory\PagerfantaFactory;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
-use Pagerfanta\Pagerfanta;
+use Hateoas\Representation\CollectionRepresentation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,11 +16,7 @@ class FoodController extends ResourceController
     public function indexAction(Request $request): Response
     {
         $queryBuilder = $this->em->createQueryBuilder()->select('f')->from($this->getEntityClassName(), 'f')->addOrderBy('f.name');
-        $adapter = new DoctrineORMAdapter($queryBuilder);
-        $pager = new Pagerfanta($adapter);
-        $pager->setCurrentPage($request->query->get('page', 1))->setMaxPerPage($request->query->get('limit', 10));
-        $factory = new PagerfantaFactory();
-        $collection = $factory->createRepresentation($pager, new \Hateoas\Configuration\Route('list_manufacturers'));
+        $collection = new CollectionRepresentation($queryBuilder->getQuery()->execute());
 
         return $this->createApiResponse($collection, Response::HTTP_OK);
     }
@@ -63,6 +57,4 @@ class FoodController extends ResourceController
     {
         return Food::class;
     }
-
-
 }

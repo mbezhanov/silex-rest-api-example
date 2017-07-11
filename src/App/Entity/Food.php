@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Hateoas\Configuration\Annotation as Hateoas;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -61,12 +60,6 @@ class Food extends Entity
      * @Assert\NotBlank()
      */
     private $protein;
-
-    /**
-     * @ORM\Column(type="integer")
-     * @Assert\NotBlank()
-     */
-    private $sugar;
 
     /**
      * @ORM\OneToMany(targetEntity="Diary", mappedBy="food")
@@ -152,15 +145,5 @@ class Food extends Entity
     public function setProtein(int $protein)
     {
         $this->protein = $protein;
-    }
-
-    public function getSugar(): int
-    {
-        return $this->sugar;
-    }
-
-    public function setSugar(int $sugar)
-    {
-        $this->sugar = $sugar;
     }
 }

@@ -10,6 +10,8 @@ use Silex\Application;
 use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\ValidatorServiceProvider;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Mapping\Loader\AnnotationLoader;
 use Symfony\Component\Validator\Mapping\Factory\LazyLoadingMetadataFactory;
 
@@ -82,5 +84,10 @@ $app['app.controller.diary_controller'] = function ($app) {
 };
 
 $app['debug'] = true;
+
+$app->after(function(Request $request, Response $response) {
+    $apiClientUrl = 'http://localhost:8080';
+    $response->headers->set('Access-Control-Allow-Origin', $apiClientUrl);
+});
 
 return $app;

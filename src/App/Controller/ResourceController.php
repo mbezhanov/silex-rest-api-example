@@ -31,7 +31,6 @@ abstract class ResourceController
         $this->validator = $validator;
     }
 
-
     protected function createApiResponse($data, $statusCode = Response::HTTP_OK): Response
     {
         $data = $this->serializer->serialize($data, 'json');

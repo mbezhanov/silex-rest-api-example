@@ -34,14 +34,21 @@ class Diary extends Entity
      */
     private $food;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $quantity;
+
     public function getDate(): \DateTime
     {
         return $this->date;
     }
 
-    public function setDate(\DateTime $date)
+    public function setDate(\DateTime $date): self
     {
         $this->date = $date;
+
+        return $this;
     }
 
     public function getMeal(): Meal
@@ -49,19 +56,36 @@ class Diary extends Entity
         return $this->meal;
     }
 
-    public function setMeal(Meal $meal)
+    public function setMeal(Meal $meal): self
     {
         $this->meal = $meal;
-    }
 
+        return $this;
+    }
 
     public function getFood(): Food
     {
         return $this->food;
     }
 
-    public function setFood(Food $food)
+    public function setFood(Food $food): self
     {
         $this->food = $food;
+
+        return $this;
     }
+
+    public function getQuantity(): int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(int $quantity): self
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+
 }

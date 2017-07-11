@@ -10,7 +10,6 @@ App\Entity\Food:
         carbs: '<numberBetween(20, 200)>'
         fat: '<numberBetween(10, 100)>'
         protein: '<numberBetween(10, 100)>'
-        sugar: '<numberBetween(10, 50)>'
 App\Entity\Meal:
     meal{Breakfast, Lunch, Dinner}:
         name: '<current()>'
@@ -19,3 +18,4 @@ App\Entity\Diary:
         date: '<dateTimeThisMonth()>'
         meal: '@meal*'
         food: '@food*'
+        quantity: '<numberBetween(1, 3)>'
