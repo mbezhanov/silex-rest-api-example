@@ -19,3 +19,8 @@ App\Entity\Diary:
         meal: '@meal*'
         food: '@food*'
         quantity: '<numberBetween(1, 3)>'
+App\Entity\Profile:
+    profile:
+        username: 'test'
+        # Lazy way of doing this: Password for "test"
+        password: '\$2y\$10\$xpjta9hjqd.ILs2ig7bnYOep9daAbsks.gikWeQNDsHHOQbtrHv4y'

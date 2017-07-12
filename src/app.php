@@ -71,17 +71,21 @@ $app['serializer'] = function ($app) {
         ->build();
 };
 
-$app['app.controller.manufacturer_controller'] = function ($app) {
-    return new App\Controller\ManufacturerController($app['orm.em'], $app['serializer'], $app['validator']);
-};
+// register controllers
+// @todo: extract this logic somewhere else
 
-$app['app.controller.food_controller'] = function ($app) {
-    return new App\Controller\FoodController($app['orm.em'], $app['serializer'], $app['validator']);
-};
+$resourceControllers = [
+    'app.controller.diary_controller' => App\Controller\DiaryController::class,
+    'app.controller.food_controller' => App\Controller\FoodController::class,
+    'app.controller.manufacturer_controller' => App\Controller\ManufacturerController::class,
+    'app.controller.profile_controller' => App\Controller\ProfileController::class,
+];
 
-$app['app.controller.diary_controller'] = function ($app) {
-    return new App\Controller\DiaryController($app['orm.em'], $app['serializer'], $app['validator']);
-};
+foreach ($resourceControllers as $serviceId => $className) {
+    $app[$serviceId] = function ($app) use ($className) {
+        return new $className($app['orm.em'], $app['serializer'], $app['validator']);
+    };
+}
 
 $app['debug'] = true;
 
