@@ -3,12 +3,15 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Hateoas\Configuration\Annotation as Hateoas;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
  * @ORM\Table(name="food")
+ * @Hateoas\Relation("self", href="expr('/foods/' ~ object.getId())")
+ * @Hateoas\Relation("manufacturer", embedded="expr(object.getManufacturer())")
  */
 class Food extends Entity
 {
@@ -23,43 +26,48 @@ class Food extends Entity
      * @ORM\Column(type="string")
      * @Assert\NotBlank()
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\ManyToOne(targetEntity="Manufacturer", inversedBy="foods")
      * @Assert\NotBlank()
+     * @Serializer\Exclude()
      */
-    private $manufacturer;
+    protected $manufacturer;
 
     /**
      * @ORM\Column(type="string")
      * @Assert\NotBlank()
      */
-    private $servingSize;
+    protected $servingSize;
 
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotBlank()
+     * @Assert\Type("integer")
      */
-    private $calories;
+    protected $calories;
 
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotBlank()
+     * @Assert\Type("integer")
      */
-    private $carbs;
+    protected $carbs;
 
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotBlank()
+     * @Assert\Type("integer")
      */
-    private $fat;
+    protected $fat;
 
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotBlank()
+     * @Assert\Type("integer")
      */
-    private $protein;
+    protected $protein;
 
     /**
      * @ORM\OneToMany(targetEntity="Diary", mappedBy="food")

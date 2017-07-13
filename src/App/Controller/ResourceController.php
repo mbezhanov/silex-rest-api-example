@@ -69,6 +69,7 @@ abstract class ResourceController
         $entity = $this->em->find($this->getEntityClassName(), $id);
 
         if (!$entity) {
+            // @todo: throw ApiProblemException instead!
             throw new \RuntimeException(sprintf('Entity not found: "%s" (id: %s)', $this->getEntityClassName(), $id));
         }
 

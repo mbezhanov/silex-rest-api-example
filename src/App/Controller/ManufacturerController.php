@@ -18,7 +18,7 @@ class ManufacturerController extends ResourceController
      */
     public function indexAction(Request $request): Response
     {
-        $queryBuilder = $this->em->createQueryBuilder()->select('m')->from($this->getEntityClassName(), 'm');
+        $queryBuilder = $this->em->createQueryBuilder()->select('m')->from($this->getEntityClassName(), 'm')->addOrderBy('m.name', 'ASC');
         $adapter = new DoctrineORMAdapter($queryBuilder);
         $pager = new Pagerfanta($adapter);
         $pager->setCurrentPage($request->query->get('page', 1))->setMaxPerPage($request->query->get('limit', 10));
