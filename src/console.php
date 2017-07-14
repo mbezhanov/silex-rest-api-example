@@ -16,7 +16,7 @@ $app = require __DIR__.'/../src/app.php';
 
 $console = new Application('REST API', '0.1.0');
 $console->setDispatcher($app['dispatcher']);
-$console->add(new ClearCacheCommand());
+$console->add(new ClearCacheCommand($app['cache']->getDirectory()));
 
 $app->register(
     new DoctrineMigrationsProvider($console),

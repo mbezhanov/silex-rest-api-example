@@ -15,7 +15,7 @@ class ProfileController extends ResourceController
     /**
      * @Route("/profile", methods={"POST", "OPTIONS"})
      */
-    public function updateAction(Request $request)
+    public function updateAction(Request $request): Response
     {
         // @todo: perform authentication check
         if ($request->getMethod() === Request::METHOD_OPTIONS) {

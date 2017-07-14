@@ -56,7 +56,6 @@ abstract class ResourceController
         return new Response($data, $statusCode, $headers);
     }
 
-
     /**
      * Finds an Entity by its PK or throws an Exception upon failure
      *

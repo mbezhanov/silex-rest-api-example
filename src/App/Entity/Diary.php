@@ -86,6 +86,4 @@ class Diary extends Entity
 
         return $this;
     }
-
-
 }
