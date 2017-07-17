@@ -1,0 +1,43 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/php:latest
+    working_directory: ~/app
+    steps:
+      - checkout
+      - run:
+          name: Install Composer
+          command: |
+            php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+            php -r "if (hash_file('SHA384', 'composer-setup.php') === trim(file_get_contents('https://composer.github.io/installer.sig'))) { echo 'Installer verified'; } else { echo 'Installer invalid'; unlink('composer-setup.php'); } echo PHP_EOL;"
+            php composer-setup.php
+            php -r "unlink('composer-setup.php');"
+      - run:
+          name: Install dependencies
+          command: php composer.phar install
+      - run:
+          name: Load fixtures
+          command: |
+            mkdir db
+            touch db/sqlite.db
+            chmod +x ./bin/console
+            ./bin/console cache:clear
+            ./bin/console orm:generate-proxies
+            ./bin/console migrations:migrate --no-interaction
+            ./bin/console fixtures:load --no-interaction
+      - deploy:
+          name: Deploy to Production
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              ssh-keyscan -H ${DEPLOY_SERVER} >> ~/.ssh/known_hosts
+              scp -Cr ~/app/. ${DEPLOY_USER}@${DEPLOY_SERVER}:${DEPLOY_DIR}/.
+              echo export WEB_PORT=8081 >> commands.txt
+              echo cd ${DEPLOY_DIR} >> commands.txt
+              echo docker-compose down >> commands.txt
+              echo chmod -R 777 ./db >> commands.txt
+              echo chmod -R 777 ./var/cache >> commands.txt
+              echo docker-compose up -d >> commands.txt
+              ssh ${DEPLOY_USER}@${DEPLOY_SERVER} < commands.txt
+              rm commands.txt
+            fi
