@@ -30,18 +30,10 @@ class FoodController extends ResourceController
     }
 
     /**
-     * @Route("/foods", methods={"POST", "OPTIONS"})
+     * @Route("/foods", methods={"POST"})
      */
     public function createAction(Request $request)
     {
-        // @todo: perform authentication check
-        if ($request->getMethod() === Request::METHOD_OPTIONS) {
-            return $this->createApiResponse(null, Response::HTTP_OK, [
-                'Access-Control-Allow-Methods' => ['POST'],
-                'Access-Control-Allow-Headers' => 'Content-Type',
-            ]);
-        }
-
         // @todo: validate request body!
         $requestBody = json_decode($request->getContent(), true);
         $requestBody['manufacturer'] = $this->em->getReference(Manufacturer::class, $requestBody['manufacturer_id']);
@@ -73,18 +65,10 @@ class FoodController extends ResourceController
     }
 
     /**
-     * @Route("/foods/{id}", methods={"PUT", "PATCH", "OPTIONS"}, requirements={"id": "\d+"})
+     * @Route("/foods/{id}", methods={"PUT", "PATCH"}, requirements={"id": "\d+"})
      */
     public function updateAction(Request $request, int $id): Response
     {
-        // @todo: perform authentication check
-        if ($request->getMethod() === Request::METHOD_OPTIONS) {
-            return $this->createApiResponse(null, Response::HTTP_OK, [
-                'Access-Control-Allow-Methods' => ['PUT', 'PATCH'],
-                'Access-Control-Allow-Headers' => 'Content-Type',
-            ]);
-        }
-
         // @todo: validate request body!
         $requestBody = json_decode($request->getContent(), true);
         $requestBody['manufacturer'] = $this->em->getReference(Manufacturer::class, $requestBody['manufacturer_id']);

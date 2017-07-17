@@ -19,7 +19,7 @@ class Profile extends Entity
     private $id;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", unique=true)
      */
     private $username;
 
@@ -28,6 +28,11 @@ class Profile extends Entity
      * @Assert\NotBlank()
      */
     private $password;
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
 
     public function setUsername(string $username)
     {

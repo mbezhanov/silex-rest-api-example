@@ -2,14 +2,12 @@
 
 namespace App\Controller;
 
-use App\Representation\ApiProblemRepresentation;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-abstract class ResourceController
+abstract class ResourceController extends BaseController
 {
     /**
      * @var EntityManagerInterface
@@ -33,27 +31,13 @@ abstract class ResourceController
         $this->validator = $validator;
     }
 
-    protected function createApiProblem($type, $extraData = [], $statusCode = Response::HTTP_BAD_REQUEST): JsonResponse
-    {
-        $apiProblem = new ApiProblemRepresentation($type, $statusCode);
-
-        foreach ($extraData as $key => $value) {
-            $apiProblem->set($key, $value);
-        }
-
-        return new JsonResponse($apiProblem->toArray(), $apiProblem->getStatusCode(), [
-            'Content-Type' => 'application/problem+json'
-        ]);
-    }
-
     protected function createApiResponse($data = null, $statusCode = Response::HTTP_OK, $headers = []): Response
     {
         if (!is_null($data)) {
             $data = $this->serializer->serialize($data, 'json');
-            $headers['Content-Type'] = 'application/hal+json';
         }
 
-        return new Response($data, $statusCode, $headers);
+        return parent::createApiResponse($data, $statusCode, $headers);
     }
 
     /**

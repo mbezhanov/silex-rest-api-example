@@ -16,7 +16,7 @@ class DiaryController extends ResourceController
     /**
      * @Route("/diary/{year}/{month}/{day}", methods={"GET"}, requirements={"year": "[\d]{4}", "month": "0[1-9]|1[0-2]", "day": "0[1-9]|[1-2][0-9]|3[0-1]"})
      */
-    public function indexAction(int $year, int $month, int $day)
+    public function indexAction(Request $request, int $year, int $month, int $day)
     {
         /** @var DiaryRepository $repository */
         $repository = $this->em->getRepository($this->getEntityClassName());
@@ -30,7 +30,7 @@ class DiaryController extends ResourceController
     /**
      * @Route("/diary/logged-dates/{year}/{month}", methods={"GET"}, requirements={"year": "[\d]{4}", "month": "0[1-9]|1[0-2]"})
      */
-    public function loggedDatesAction(int $year, int $month)
+    public function loggedDatesAction(Request $request, int $year, int $month)
     {
         /** @var DiaryRepository $repository */
         $repository = $this->em->getRepository($this->getEntityClassName());
@@ -44,17 +44,10 @@ class DiaryController extends ResourceController
     }
 
     /**
-     * @Route("/diary", methods={"POST", "OPTIONS"})
+     * @Route("/diary", methods={"POST"})
      */
     public function createAction(Request $request)
     {
-        if ($request->getMethod() === Request::METHOD_OPTIONS) {
-            return new Response(null, 200, [
-                'Access-Control-Allow-Methods' => ['POST', 'DELETE'],
-                'Access-Control-Allow-Headers' => 'Content-Type',
-            ]);
-        }
-
         // @todo: validate request body!
         $requestBody = json_decode($request->getContent(), true);
 
@@ -76,19 +69,12 @@ class DiaryController extends ResourceController
     }
 
     /**
-     * @Route("/diary/{id}", methods={"DELETE", "OPTIONS"}, requirements={"id": "\d+"})
+     * @Route("/diary/{id}", methods={"DELETE"}, requirements={"id": "\d+"})
      */
     public function deleteAction(Request $request, int $id)
     {
-        if ($request->getMethod() === Request::METHOD_OPTIONS) {
-            return new Response(null, 200, [
-                'Access-Control-Allow-Methods' => ['DELETE'],
-                'Access-Control-Allow-Headers' => 'Content-Type',
-            ]);
-        }
-
-        $entity = $this->findOrFail($id);
-        $this->em->remove($entity);
+        $diary = $this->findOrFail($id);
+        $this->em->remove($diary);
         $this->em->flush();
 
         return $this->createApiResponse('', Response::HTTP_NO_CONTENT);

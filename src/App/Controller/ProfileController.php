@@ -5,29 +5,34 @@ namespace App\Controller;
 use App\Entity\Profile;
 use App\Representation\ApiProblemRepresentation;
 use Bezhanov\Silex\Routing\Route;
+use Lcobucci\JWT\Parser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProfileController extends ResourceController
 {
-    private const THE_ONLY_USER_ID_CURRENTLY_PRESENT = 1;
+    /**
+     * @var Parser
+     */
+    private $jwt;
+
+    public function setJwtParser(Parser $jwt)
+    {
+        $this->jwt = $jwt;
+    }
 
     /**
-     * @Route("/profile", methods={"POST", "OPTIONS"})
+     * @Route("/profile", methods={"POST"})
      */
     public function updateAction(Request $request): Response
     {
-        // @todo: perform authentication check
-        if ($request->getMethod() === Request::METHOD_OPTIONS) {
-            return $this->createApiResponse(null, 200, [
-                'Access-Control-Allow-Methods' => ['POST'],
-                'Access-Control-Allow-Headers' => 'Content-Type',
-            ]);
-        }
-
         // @todo: validate request body!
         $requestBody = json_decode($request->getContent(), true);
-        $profile = $this->findOrFail(self::THE_ONLY_USER_ID_CURRENTLY_PRESENT);
+
+        list($bearer, $token) = explode(' ', $request->headers->get('Authorization'));
+
+        $token = $this->jwt->parse($token);
+        $profile = $this->findOrFail($token->getClaim('uid'));
 
         if (!password_verify($requestBody['old_password'], $profile->getPassword())) {
             return $this->createApiProblem(ApiProblemRepresentation::TYPE_INVALID_PASSWORD);

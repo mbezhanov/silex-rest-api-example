@@ -12,13 +12,21 @@ AnnotationRegistry::registerLoader([$loader, 'loadClass']);
 
 $cache = new FilesystemCache(__DIR__ . '/../var/cache');
 
-$app = new Application($cache);
+$app = new Application([
+    'cache' => function () use ($cache) {
+        return $cache;
+    },
+    'api_url' => 'http://app.local:8081',
+    'api_client_url' =>  'http://localhost:8080',
+]);
 
 $app['debug'] = true;
+$app['cors-enabled']($app);
 
-$app->after(function(Request $request, Response $response) {
-    $apiClientUrl = 'http://localhost:8080';
-    $response->headers->set('Access-Control-Allow-Origin', $apiClientUrl);
+$app->before(function(Request $request) {
+    if (!$request->headers->get('Authorization') && $request->getPathInfo() !== '/login' && !$request->isMethod(Request::METHOD_OPTIONS)) {
+        throw new \Symfony\Component\HttpKernel\Exception\HttpException(Response::HTTP_FORBIDDEN);
+    }
 });
 
 return $app;

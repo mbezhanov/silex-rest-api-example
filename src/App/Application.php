@@ -4,13 +4,16 @@ namespace App;
 
 use App\Controller\DiaryController;
 use App\Controller\FoodController;
+use App\Controller\LoginController;
 use App\Controller\ManufacturerController;
 use App\Controller\ProfileController;
+use App\ServiceProvider\JwtServiceProvider;
 use App\ServiceProvider\SerializerServiceProvider;
 use Bezhanov\Silex\Routing\RouteAnnotationsProvider;
 use Dflydev\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Cache\FileCache;
+use JDesrosiers\Silex\Provider\CorsServiceProvider;
+use Pimple\Container;
 use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\ValidatorServiceProvider;
@@ -21,13 +24,14 @@ use Symfony\Component\Validator\Mapping\Loader\AnnotationLoader;
 
 class Application extends \Silex\Application
 {
-    public function __construct(FileCache $cache, array $values = [])
+    public function __construct(array $values = [])
     {
         parent::__construct($values);
 
-        $this['cache'] = function () use ($cache) {
-            return $cache;
-        };
+        if (!isset($this['cache'])) {
+            throw new \RuntimeException('Unable to start Application without Cache');
+        }
+
         $this->registerServiceProviders();
         $this->registerControllers();
     }
@@ -76,7 +80,11 @@ class Application extends \Silex\Application
             ])
             ->register(new SerializerServiceProvider(), [
                 'serializer.cache_dir' => $app['cache']->getDirectory()
-            ]);
+            ])
+            ->register(new CorsServiceProvider(), [
+                'cors.allowOrigin' => $app['api_client_url']
+            ])
+            ->register(new JwtServiceProvider());
     }
 
     private function registerControllers()
@@ -95,5 +103,14 @@ class Application extends \Silex\Application
                 return new $className($app['orm.em'], $app['serializer'], $app['validator']);
             };
         }
+
+        $app->extend('app.controller.profile_controller', function (ProfileController $profileController, Container $app) {
+            $profileController->setJwtParser($app['jwt.parser']);
+            return $profileController;
+        });
+
+        $app['app.controller.login_controller'] = function ($app) {
+            return new LoginController($app['orm.em'], $app['jwt.builder']);
+        };
     }
 }
