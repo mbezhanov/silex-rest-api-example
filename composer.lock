@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "2d86dca4328cbea4bb7d8b5ebe4b70cf",
+    "content-hash": "a299691f3fcf22c6583420960b696cb6",
     "packages": [
         {
             "name": "dflydev/doctrine-orm-service-provider",
@@ -1968,6 +1968,63 @@
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
             "time": "2017-06-06T14:51:55+00:00"
+        },
+        {
+            "name": "symfony/dotenv",
+            "version": "v3.3.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/dotenv.git",
+                "reference": "0bbd618051dc828c0013e1ecdb653d956df8bfb3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/dotenv/zipball/0bbd618051dc828c0013e1ecdb653d956df8bfb3",
+                "reference": "0bbd618051dc828c0013e1ecdb653d956df8bfb3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9"
+            },
+            "require-dev": {
+                "symfony/process": "^3.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Dotenv\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Registers environment variables from a .env file",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "dotenv",
+                "env",
+                "environment"
+            ],
+            "time": "2017-07-06T12:23:24+00:00"
         },
         {
             "name": "symfony/event-dispatcher",

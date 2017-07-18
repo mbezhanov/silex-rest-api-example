@@ -16,11 +16,8 @@ $app = new Application([
     'cache' => function () use ($cache) {
         return $cache;
     },
-    'api_url' => 'http://app.local:8081',
-    'api_client_url' =>  'http://localhost:8080',
 ]);
 
-$app['debug'] = true;
 $app['cors-enabled']($app);
 
 $app->before(function(Request $request) {

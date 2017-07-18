@@ -18,6 +18,7 @@ use Silex\Provider\DoctrineServiceProvider;
 use Silex\Provider\ServiceControllerServiceProvider;
 use Silex\Provider\ValidatorServiceProvider;
 use Symfony\Component\Cache\Adapter\DoctrineAdapter;
+use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Component\Validator\Mapping\Cache\DoctrineCache;
 use Symfony\Component\Validator\Mapping\Factory\LazyLoadingMetadataFactory;
 use Symfony\Component\Validator\Mapping\Loader\AnnotationLoader;
@@ -32,8 +33,24 @@ class Application extends \Silex\Application
             throw new \RuntimeException('Unable to start Application without Cache');
         }
 
+        $this->registerEnvironmentVariables();
         $this->registerServiceProviders();
         $this->registerControllers();
+    }
+
+    private function registerEnvironmentVariables()
+    {
+        $env = __DIR__ . '/../../.env';
+
+        if (file_exists($env)) {
+            $dotenv = new Dotenv();
+            $dotenv->load($env);
+        }
+
+        $app = $this;
+        $app['debug'] = getenv('DEBUG');
+        $app['api_url'] = getenv('API_URL');
+        $app['api_client_url'] = getenv('API_CLIENT_URL');
     }
 
     private function registerServiceProviders()
