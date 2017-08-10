@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Exception\ApiProblemException;
 use Lcobucci\JWT\Builder;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Signer;
@@ -50,7 +51,7 @@ class JwtService
     public function refreshToken(string $previousToken): Token
     {
         if (!$this->validateToken($previousToken)) {
-            // @todo: throw API Problem exception
+            throw new ApiProblemException(ApiProblemException::TYPE_INVALID_REQUEST_BODY);
         }
         $previousToken = $this->parser->parse($previousToken);
 

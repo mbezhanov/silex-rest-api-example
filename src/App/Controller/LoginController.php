@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Profile;
-use App\Representation\ApiProblemRepresentation;
+use App\Exception\ApiProblemException;
 use App\Service\JwtService;
 use Bezhanov\Silex\Routing\Route;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,8 +31,8 @@ class LoginController extends BaseController
      */
     public function loginAction(Request $request)
     {
-        // @todo: validate request body!
-        $requestBody = json_decode($request->getContent(), true);
+        $expectedParameters = ['username', 'password'];
+        $requestBody = $this->extractRequestBody($request, $expectedParameters);
 
         /** @var Profile $profile */
         $profile = $this->em->getRepository(Profile::class)->findOneBy([
@@ -40,11 +40,11 @@ class LoginController extends BaseController
         ]);
 
         if (!$profile) {
-            // @todo: throw api problem exception
+            throw new ApiProblemException(ApiProblemException::TYPE_INVALID_USERNAME);
         }
 
         if (!password_verify($requestBody['password'], $profile->getPassword())) {
-            return $this->createApiProblem(ApiProblemRepresentation::TYPE_INVALID_PASSWORD);
+            throw new ApiProblemException(ApiProblemException::TYPE_INVALID_PASSWORD);
         }
 
         return $this->createApiResponse(json_encode([
@@ -57,8 +57,8 @@ class LoginController extends BaseController
      */
     public function renewAction(Request $request)
     {
-        // @todo: validate request body!
-        $requestBody = json_decode($request->getContent(), true);
+        $expectedParameters = ['token'];
+        $requestBody = $this->extractRequestBody($request, $expectedParameters);
 
         $token = str_replace('Bearer ', '', $requestBody['token']);
 

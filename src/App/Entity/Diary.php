@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\DiaryRepository")
@@ -19,6 +20,7 @@ class Diary extends Entity
 
     /**
      * @ORM\Column(type="date")
+     * @Assert\Date()
      */
     private $date;
 
@@ -36,6 +38,7 @@ class Diary extends Entity
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\GreaterThan(0)
      */
     private $quantity;
 

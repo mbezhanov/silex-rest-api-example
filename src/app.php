@@ -38,4 +38,10 @@ $app->before(function(Request $request, Application $app) {
     }
 });
 
+$app->error(function (\App\Exception\ApiProblemException $e, Request $request, $code) {
+    return new \Symfony\Component\HttpFoundation\JsonResponse($e->toArray(), $e->getStatusCode(), [
+        'Content-Type' => 'application/problem+json'
+    ]);
+});
+
 return $app;
