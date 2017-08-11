@@ -16,6 +16,9 @@
             "App\\": "src/App"
         }
     },
+    "autoload-dev": {
+        "psr-4": { "App\\Tests\\": "tests" }
+    },
     "minimum-stability": "RC",
     "require": {
         "php": "^7.1",
@@ -35,6 +38,8 @@
     },
     "require-dev": {
         "mbezhanov/silex-alice-data-fixtures": "^0.2",
-        "mbezhanov/faker-provider-collection": "^0.1"
+        "mbezhanov/faker-provider-collection": "^0.1",
+        "php-mock/php-mock": "^2.0",
+        "phpunit/phpunit": "^6.3"
     }
 }

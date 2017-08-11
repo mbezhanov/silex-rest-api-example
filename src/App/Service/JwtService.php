@@ -30,7 +30,6 @@ class JwtService
 
     public function __construct(Builder $jwt, Parser $parser, Signer $signer, string $apiTokenSignKey)
     {
-
         $this->jwt = $jwt;
         $this->parser = $parser;
         $this->signer = $signer;
@@ -50,9 +49,7 @@ class JwtService
 
     public function refreshToken(string $previousToken): Token
     {
-        if (!$this->validateToken($previousToken)) {
-            throw new ApiProblemException(ApiProblemException::TYPE_INVALID_REQUEST_BODY);
-        }
+        $this->validateToken($previousToken);
         $previousToken = $this->parser->parse($previousToken);
 
         return $this->createToken($previousToken->getClaim('uid'));
@@ -61,7 +58,12 @@ class JwtService
     public function validateToken(string $token): bool
     {
         $data = new ValidationData();
-        $token = $this->parser->parse($token);
+
+        try {
+            $token = $this->parser->parse($token);
+        } catch (\Exception $e) {
+            throw new ApiProblemException(ApiProblemException::TYPE_INVALID_TOKEN);
+        }
 
         return $token->validate($data);
     }

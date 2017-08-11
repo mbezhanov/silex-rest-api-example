@@ -10,3 +10,6 @@ composer.phar
 
 ### SQLite Database ###
 sqlite.db
+
+### PHPUnit Code Coverage ###
+/coverage/
