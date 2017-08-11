@@ -1,5 +1,7 @@
 # silex-rest-api-example
 
+[![CircleCI](https://img.shields.io/circleci/project/github/mbezhanov/silex-rest-api-example.svg)]()
+
 An example REST API built with [Silex](https://silex.symfony.com/)
 
 Libraries used:
