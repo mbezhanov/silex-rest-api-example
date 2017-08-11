@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Exception\ApiProblemException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use JMS\Serializer\SerializerInterface;
@@ -52,8 +53,8 @@ abstract class ResourceController extends BaseController
         $entity = $this->em->find($this->getEntityClassName(), $id);
 
         if (!$entity) {
-            // @todo: throw ApiProblemException instead!
-            throw new \RuntimeException(sprintf('Entity not found: "%s" (id: %s)', $this->getEntityClassName(), $id));
+            $message = sprintf('Entity not found: "%s" (id: %s)', $this->getEntityClassName(), $id);
+            throw new ApiProblemException(ApiProblemException::TYPE_ENTITY_NOT_FOUND, Response::HTTP_BAD_REQUEST, $message);
         }
 
         return $entity;

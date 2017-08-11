@@ -43,29 +43,25 @@ class Food extends Entity
 
     /**
      * @ORM\Column(type="integer")
-     * @Assert\NotBlank()
-     * @Assert\Type("integer")
+     * @Assert\GreaterThan(0)
      */
     protected $calories;
 
     /**
      * @ORM\Column(type="integer")
-     * @Assert\NotBlank()
-     * @Assert\Type("integer")
+     * @Assert\GreaterThan(0)
      */
     protected $carbs;
 
     /**
      * @ORM\Column(type="integer")
-     * @Assert\NotBlank()
-     * @Assert\Type("integer")
+     * @Assert\GreaterThan(0)
      */
     protected $fat;
 
     /**
      * @ORM\Column(type="integer")
-     * @Assert\NotBlank()
-     * @Assert\Type("integer")
+     * @Assert\GreaterThan(0)
      */
     protected $protein;
 

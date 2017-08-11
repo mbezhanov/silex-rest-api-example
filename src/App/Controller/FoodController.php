@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Food;
 use App\Entity\Manufacturer;
-use App\Representation\ApiProblemRepresentation;
+use App\Exception\ApiProblemException;
 use Bezhanov\Silex\Routing\Route;
 use Hateoas\Representation\Factory\PagerfantaFactory;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
@@ -34,18 +34,18 @@ class FoodController extends ResourceController
      */
     public function createAction(Request $request)
     {
-        // @todo: validate request body!
-        $requestBody = json_decode($request->getContent(), true);
+        $expectedParameters = ['name', 'servingSize', 'calories', 'carbs', 'fat', 'protein', 'manufacturer_id'];
+        $requestBody = $this->extractRequestBody($request, $expectedParameters);
         $requestBody['manufacturer'] = $this->em->getReference(Manufacturer::class, $requestBody['manufacturer_id']);
+        array_splice($expectedParameters, -1, 1, ['manufacturer']);
 
         $food = new Food();
-        $food->fromArray($requestBody, ['name', 'servingSize', 'calories', 'carbs', 'fat', 'protein', 'manufacturer']);
+        $food->fromArray($requestBody, $expectedParameters);
         $violations = $this->validator->validate($food);
 
         if ($violations->count() > 0) {
-            return $this->createApiProblem(ApiProblemRepresentation::TYPE_VALIDATION_ERROR);
+            throw new ApiProblemException(ApiProblemException::TYPE_VALIDATION_ERROR);
         }
-
         $this->em->persist($food);
         $this->em->flush();
 
@@ -69,15 +69,16 @@ class FoodController extends ResourceController
      */
     public function updateAction(Request $request, int $id): Response
     {
-        // @todo: validate request body!
-        $requestBody = json_decode($request->getContent(), true);
+        $expectedParameters = ['servingSize', 'calories', 'carbs', 'fat', 'protein', 'manufacturer_id'];
+        $requestBody = $this->extractRequestBody($request, $expectedParameters);
         $requestBody['manufacturer'] = $this->em->getReference(Manufacturer::class, $requestBody['manufacturer_id']);
+        array_splice($expectedParameters, -1, 1, ['manufacturer']);
         $food = $this->findOrFail($id);
-        $food->fromArray($requestBody, ['serving_size', 'calories', 'carbs', 'fat', 'protein', 'manufacturer']);
+        $food->fromArray($requestBody, $expectedParameters);
         $violations = $this->validator->validate($food);
 
         if ($violations->count() > 0) {
-            return $this->createApiProblem(ApiProblemRepresentation::TYPE_VALIDATION_ERROR);
+            throw new ApiProblemException(ApiProblemException::TYPE_VALIDATION_ERROR);
         }
         $this->em->flush();
 

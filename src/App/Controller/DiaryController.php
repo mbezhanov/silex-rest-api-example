@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Diary;
 use App\Entity\Food;
 use App\Entity\Meal;
+use App\Exception\ApiProblemException;
 use App\Repository\DiaryRepository;
 use Bezhanov\Silex\Routing\Route;
 use Hateoas\Representation\CollectionRepresentation;
@@ -16,7 +17,7 @@ class DiaryController extends ResourceController
     /**
      * @Route("/diary/{year}/{month}/{day}", methods={"GET"}, requirements={"year": "[\d]{4}", "month": "0[1-9]|1[0-2]", "day": "0[1-9]|[1-2][0-9]|3[0-1]"})
      */
-    public function indexAction(Request $request, int $year, int $month, int $day)
+    public function indexAction(Request $request, int $year, int $month, int $day): Response
     {
         /** @var DiaryRepository $repository */
         $repository = $this->em->getRepository($this->getEntityClassName());
@@ -30,7 +31,7 @@ class DiaryController extends ResourceController
     /**
      * @Route("/diary/logged-dates/{year}/{month}", methods={"GET"}, requirements={"year": "[\d]{4}", "month": "0[1-9]|1[0-2]"})
      */
-    public function loggedDatesAction(Request $request, int $year, int $month)
+    public function loggedDatesAction(Request $request, int $year, int $month): Response
     {
         /** @var DiaryRepository $repository */
         $repository = $this->em->getRepository($this->getEntityClassName());
@@ -46,10 +47,10 @@ class DiaryController extends ResourceController
     /**
      * @Route("/diary", methods={"POST"})
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request): Response
     {
-        // @todo: validate request body!
-        $requestBody = json_decode($request->getContent(), true);
+        $expectedParameters = ['date', 'meal_id', 'food_id', 'quantity'];
+        $requestBody = $this->extractRequestBody($request, $expectedParameters);
 
         $diary = new Diary();
         $date = new \DateTime($requestBody['date']);
@@ -58,6 +59,11 @@ class DiaryController extends ResourceController
         /** @var Food $food */
         $food = $this->em->getReference(Food::class, $requestBody['food_id']);
         $diary->setDate($date)->setMeal($meal)->setFood($food)->setQuantity($requestBody['quantity']);
+        $violations = $this->validator->validate($diary);
+
+        if ($violations->count() > 0) {
+            throw new ApiProblemException(ApiProblemException::TYPE_VALIDATION_ERROR);
+        }
 
         $this->em->persist($diary);
         $this->em->flush();
@@ -71,7 +77,7 @@ class DiaryController extends ResourceController
     /**
      * @Route("/diary/{id}", methods={"DELETE"}, requirements={"id": "\d+"})
      */
-    public function deleteAction(Request $request, int $id)
+    public function deleteAction(Request $request, int $id): Response
     {
         $diary = $this->findOrFail($id);
         $this->em->remove($diary);

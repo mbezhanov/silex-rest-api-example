@@ -51,6 +51,7 @@ class Application extends \Silex\Application
         $app['debug'] = getenv('DEBUG');
         $app['api_url'] = getenv('API_URL');
         $app['api_client_url'] = getenv('API_CLIENT_URL');
+        $app['api_token_sign_key'] = getenv('API_TOKEN_SIGN_KEY');
     }
 
     private function registerServiceProviders()
@@ -127,7 +128,7 @@ class Application extends \Silex\Application
         });
 
         $app['app.controller.login_controller'] = function ($app) {
-            return new LoginController($app['orm.em'], $app['jwt.builder']);
+            return new LoginController($app['orm.em'], $app['jwt.service']);
         };
     }
 }
